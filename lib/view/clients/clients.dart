@@ -62,9 +62,10 @@ class _Clients extends State<Clients> {
                                       backgroundColor: colorsApp.colorWhaitApp,
                                       child: IconButton(
                                           onPressed: () {
-                                            dialogApp.deleteProdect(
+                                            dialogApp.delete(
                                                 context,
-                                                () {},
+                                                () {
+                                                },
                                                 "هل تريد حذف السائق من النظام");
                                           },
                                           icon: Icon(
@@ -321,7 +322,7 @@ class _Clients extends State<Clients> {
                                     alignment: Alignment.topLeft,
                                     child: IconButton(
                                         onPressed: () {
-                                          dialogApp.deleteProdect(context,
+                                          dialogApp.delete(context,
                                               () {}, "هل تريد حذف هذا العميل");
                                         },
                                         icon: Icon(Icons.delete_outline)),

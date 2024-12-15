@@ -48,31 +48,55 @@ class _Catogreis extends State<Catogreis> {
                               val.Prodects(val.catogerydata['data'][i]['id']);
                             },
                             child: Container(
+                              padding: EdgeInsets.all(5),
                               width: double.infinity,
                               decoration: BoxDecoration(
-                                  color: colorsApp.colorWhaitApp,
+                                  color:
+                                      colorsApp.colorWhaitApp.withOpacity(0.6),
                                   borderRadius: BorderRadius.circular(20)),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Row(
                                     children: [
-                                      IconButton(
-                                          onPressed: () {
-                                            dialogApp.deleteProdect(context,
-                                                () {
-                                              val.DeleteCatogery(
-                                                  val.catogerydata['data'][i]
-                                                      ['id'],
-                                                  context);
-                                            }, "هل تريد حذف القسم ؟");
-                                          },
-                                          icon: Icon(Icons.delete)),
-                                      IconButton(
-                                          onPressed: () {},
-                                          icon: Icon(
-                                            Icons.edit,
-                                          )),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color: colorsApp.colorWhaitApp,
+                                            border: Border.all(
+                                                width: 0.5,
+                                                color: colorsApp.colorborder),
+                                            borderRadius:
+                                                BorderRadius.circular(50)),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              dialogApp.delete(context,
+                                                  () {
+                                                    
+                                                val.DeleteCatogery(
+                                                    val.catogerydata['data'][i]
+                                                        ['id'],
+                                                    context);
+                                              }, "هل تريد حذف القسم ؟");
+                                            },
+                                            icon: Icon(Icons.delete_outline)),
+                                      ),
+                                      Container(
+                                        margin:
+                                            EdgeInsets.symmetric(horizontal: 5),
+                                        decoration: BoxDecoration(
+                                            color: colorsApp.colorWhaitApp,
+                                            border: Border.all(
+                                                width: 0.5,
+                                                color: colorsApp.colorborder),
+                                            borderRadius:
+                                                BorderRadius.circular(50)),
+                                        child: IconButton(
+                                            padding: EdgeInsets.all(0),
+                                            onPressed: () {},
+                                            icon: Icon(
+                                              Icons.edit_outlined,
+                                            )),
+                                      ),
                                     ],
                                   ),
                                   Container(

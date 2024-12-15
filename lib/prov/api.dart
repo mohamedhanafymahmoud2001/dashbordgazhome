@@ -19,7 +19,9 @@ class Api {
         "phone_number": email.text,
         "password": password.text,
       }, headers: {
-        "Accept": "application/json"
+        "Accept": "application/json",
+        'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
       });
       var responsbody = jsonDecode(respons.body);
       if (responsbody.isNotEmpty) {
@@ -39,7 +41,11 @@ class Api {
     try {
       var response = await http.get(
         Uri.parse(url),
-        headers: {'Accept': 'application/json'},
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent':
+              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        },
       );
       if (!response.body.isEmpty) {
         var responsebody = jsonDecode(response.body);
@@ -79,19 +85,34 @@ class Api {
         options: Options(
           headers: {
             'Accept': 'application/json',
+            'User-Agent':
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
           },
         ),
       );
 
-      if (response.statusCode == 200) {
-        addcatogery = jsonDecode(response.toString());
-        print('تم رفع الصورة بنجاح: ${response.data}');
-      } else {
-        print('فشل رفع الصورة: ${response.statusCode}');
-      }
-    } catch (e) {
-      print("error catoger $e");
+      
+    // التحقق من حالة الرد
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      addcatogery = jsonDecode(response.toString());
+      print('تم إضافة السائق بنجاح: ${response.data}');
+    } else {
+      print('فشل في إضافة السائق: ${response.statusCode}');
+      print('الرد من الخادم: ${response.data}');
     }
+  } on DioError catch (dioError) {
+    if (dioError.response != null) {
+      // خطأ مع استجابة من الخادم
+      print('خطأ من الخادم: ${dioError.response?.statusCode}');
+      print('تفاصيل الخطأ: ${dioError.response?.data}');
+    } else {
+      // خطأ في الاتصال بالخادم
+      print('فشل الاتصال بالخادم: ${dioError.message}');
+    }
+  } catch (e) {
+    // لأي خطأ غير متوقع
+    print('حدث خطأ غير متوقع: $e');
+  }
     return addcatogery;
   }
 
@@ -102,7 +123,11 @@ class Api {
     try {
       var response = await http.get(
         Uri.parse(url),
-        headers: {'Accept': 'application/json'},
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent':
+              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        },
       );
       if (!response.body.isEmpty) {
         var responsebody = jsonDecode(response.body);
@@ -126,7 +151,11 @@ class Api {
     try {
       var response = await http.get(
         Uri.parse(url),
-        headers: {'Accept': 'application/json'},
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent':
+              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        },
       );
       if (!response.body.isEmpty) {
         var responsebody = jsonDecode(response.body);
@@ -150,7 +179,11 @@ class Api {
     try {
       var response = await http.get(
         Uri.parse(url),
-        headers: {'Accept': 'application/json'},
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent':
+              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        },
       );
       if (!response.body.isEmpty) {
         var responsebody = jsonDecode(response.body);
@@ -172,7 +205,7 @@ class Api {
   TextEditingController amountProdect = new TextEditingController();
   TextEditingController descriptinProdect = new TextEditingController();
   var addProdect;
-  AddProdect(File imageFile, int idCatogery) async {
+  AddProdect(File imageFileProdect, int idCatogery) async {
     addProdect = null;
     final dio = Dio();
     print(idCatogery);
@@ -181,14 +214,14 @@ class Api {
     print(descriptinProdect.text);
     print(amountProdect.text);
     FormData formData = FormData.fromMap({
-      'category_id': idCatogery,
+      'category_id': idCatogery.toString(),
       'name': nameProdect.text,
-      'price': int.parse(priceProdect.text),
+      'price': priceProdect.text,
       'description': descriptinProdect.text,
-      'quantity': int.parse(amountProdect.text),
+      'quantity': amountProdect.text,
       'image': await MultipartFile.fromFile(
-        imageFile.path,
-        filename: imageFile.path.split('/').last,
+        imageFileProdect.path,
+        filename: imageFileProdect.path.split('/').last,
       ),
     });
     // إرسال الطلب
@@ -199,20 +232,61 @@ class Api {
         options: Options(
           headers: {
             'Accept': 'application/json',
+            'User-Agent':
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
           },
         ),
       );
-      if (response.statusCode == 200) {
-        addProdect = jsonDecode(response.toString());
-        print('تم رفع الصورة بنجاح: ${response.data}');
-      } else {
-        print('فشل رفع الصورة: ${response.statusCode}');
+      
+    // التحقق من حالة الرد
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      addProdect = jsonDecode(response.toString());
+      print('تم إضافة السائق بنجاح: ${response.data}');
+    } else {
+      print('فشل في إضافة السائق: ${response.statusCode}');
+      print('الرد من الخادم: ${response.data}');
+    }
+  } on DioError catch (dioError) {
+    if (dioError.response != null) {
+      // خطأ مع استجابة من الخادم
+      print('خطأ من الخادم: ${dioError.response?.statusCode}');
+      print('تفاصيل الخطأ: ${dioError.response?.data}');
+    } else {
+      // خطأ في الاتصال بالخادم
+      print('فشل الاتصال بالخادم: ${dioError.message}');
+    }
+  } catch (e) {
+    // لأي خطأ غير متوقع
+    print('حدث خطأ غير متوقع: $e');
+  }
+    return addProdect;
+  }
+  var deleteprodect = null;
+  Future DeleteProdect(int id) async {
+    deleteprodect = null;
+    String url = "$ip/api/product/delete/$id";
+    try {
+      var response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent':
+              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        },
+      );
+      if (!response.body.isEmpty) {
+        var responsebody = jsonDecode(response.body);
+        deleteprodect = responsebody;
+        print(responsebody.length);
+        print(responsebody.length);
+        print(responsebody);
+        print(responsebody);
       }
     } catch (e) {
       print(e);
-      print(e);
     }
-    return addProdect;
+
+    return deleteprodect;
   }
 
   TextEditingController nameDriver = new TextEditingController();
@@ -224,41 +298,59 @@ class Api {
       new TextEditingController();
   var addDriver;
   AddDriver(File imageFile) async {
-    addProdect = null;
-    final dio = Dio();
-    FormData formData = FormData.fromMap({
-      'name': nameDriver.text,
-      'phone': phoneDriver.text,
-      'address': addressDriver.text,
-      'license_number': licenseNumberDriver.text,
-      'vehicle_number': vehicleNumberDriver.text,
-      'image': await MultipartFile.fromFile(
-        imageFile.path,
-        filename: imageFile.path.split('/').last,
-      ),
-    });
-    // إرسال الطلب
-    try {
-      Response response = await dio.post(
-        '$ip/api/product/create', // رابط الخادم الخاص بك
-        data: formData,
-        options: Options(
-          headers: {
-            'Accept': 'application/json',
-          },
-        ),
-      );
+  var addDriver; // تعريف المتغير لتخزين نتيجة العملية
+  final dio = Dio();
 
-      if (response.statusCode == 200) {
-        addDriver = jsonDecode(response.toString());
-        print('تم رفع الصورة بنجاح: ${response.data}');
-      } else {
-        print('فشل رفع الصورة: ${response.statusCode}');
-      }
-    } catch (e) {
-      print(e);
-      print(e);
+  // تجهيز بيانات النموذج
+  FormData formData = FormData.fromMap({
+    'name': nameDriver.text,
+    'phone': phoneDriver.text,
+    'address': addressDriver.text,
+    'license_number': licenseNumberDriver.text,
+    'vehicle_number': vehicleNumberDriver.text,
+    'image': await MultipartFile.fromFile(
+      imageFile.path,
+      filename: imageFile.path.split('/').last,
+    ),
+  });
+
+  try {
+    // إرسال الطلب إلى الخادم
+    Response response = await dio.post(
+      '$ip/api/driver/create', // تأكد من تحديث الرابط بما يناسب واجهتك الخلفية
+      data: formData,
+      options: Options(
+        headers: {
+          'Accept': 'application/json',
+            'User-Agent':
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        },
+      ),
+    );
+
+    // التحقق من حالة الرد
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      addDriver = jsonDecode(response.toString());
+      print('تم إضافة السائق بنجاح: ${response.data}');
+    } else {
+      print('فشل في إضافة السائق: ${response.statusCode}');
+      print('الرد من الخادم: ${response.data}');
     }
-    return addDriver;
+  } on DioError catch (dioError) {
+    if (dioError.response != null) {
+      // خطأ مع استجابة من الخادم
+      print('خطأ من الخادم: ${dioError.response?.statusCode}');
+      print('تفاصيل الخطأ: ${dioError.response?.data}');
+    } else {
+      // خطأ في الاتصال بالخادم
+      print('فشل الاتصال بالخادم: ${dioError.message}');
+    }
+  } catch (e) {
+    // لأي خطأ غير متوقع
+    print('حدث خطأ غير متوقع: $e');
   }
+
+  return addDriver;
+}
+
 }

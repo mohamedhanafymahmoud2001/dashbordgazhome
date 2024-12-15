@@ -87,7 +87,7 @@ class DialogApp {
     );
   }
 
-  Future<void> deleteProdect(
+  Future<void> delete(
       BuildContext context, VoidCallback func, String title) async {
     return showDialog<void>(
       context: context,
@@ -135,7 +135,7 @@ class DialogApp {
                       title: "موافق",
                       color: colorsApp.colorblackapp,
                       fontcolor: colorsApp.colorWhaitApp,
-                      func:func,
+                      func: func,
                       width: 100),
                 ],
               ),
@@ -145,6 +145,7 @@ class DialogApp {
       },
     );
   }
+
   GlobalKey<FormState> formstateAddProdect = GlobalKey();
   Future<void> addProdect(
       BuildContext context, VoidCallback func, String title) async {
@@ -153,179 +154,205 @@ class DialogApp {
       builder: (BuildContext context) {
         return Consumer<Control>(builder: (context, val, child) {
           return Form(
-            key:formstateAddProdect,
+            key: formstateAddProdect,
             child: AlertDialog(
               backgroundColor: Colors.white,
               shadowColor: Colors.white,
               scrollable: true,
               elevation: 10,
-              title: Container(
-                alignment: Alignment.center,
-                child: Text(
-                  "$title",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-              ),
-              content: Container(
-                  padding: EdgeInsets.only(top: 20),
-                  alignment: Alignment.center,
-                  child: Row(
-                    children: [
-                      Container(
-                          child: Column(
-                        children: [
-                          DottedBorder(
-                            borderType: BorderType.RRect,
-                            radius: Radius.circular(10),
-                            dashPattern: [6, 3], // طول الخط والمسافة بين الخطوط
-                            color: colorsApp.colorgreyApp,
-                            strokeWidth: 2,
-                            child: Container(
-                              height: 200,
-                              width: 300,
-                              child: Column(
-                                children: [
-                                  val.imageFileProdect==null?Container(
-                                    margin: EdgeInsets.only(top: 30),
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Image.asset("assets/images/image1.png"),
-                                        Container(
-                                            margin: EdgeInsets.only(bottom: 20),
-                                            child: Image.asset(
-                                                "assets/images/image2.png")),
-                                      ],
-                                    ),
-                                  ):Container(
-                                          height: 150,
-                                          child: Image.file(val.imageFileProdect!),
-                                        ),
-                                  Expanded(child: Container()),
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: 30),
-                                    child: Text(
-                                      "قم بتحميل صورة المنتج لعرضها في النظام",
-                                      style:
-                                          TextStyle(fontWeight: FontWeight.w500),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
-                      )),
-                      Container(
-                        width: 350,
-                        child: Column(
-                          children: [
-                            InputApp(
-                                hint: "ادخل اسم المنتج",
-                                controler: val.api.nameProdect,
-                                icon: Icon(
-                                  Icons.production_quantity_limits,
-                                  color: colorsApp.colorgreyApp,
-                                ),
-                                keyboard: TextInputType.text),
-                            InputAppNumber(
-                                hint: "حدد سعر المنتج",
-                                controller: val.api.priceProdect,
-                                icon: Icon(
-                                  Icons.price_change,
-                                  color: colorsApp.colorgreyApp,
-                                ),
-                                keyboard: TextInputType.text),
-                            InputAppNumber(
-                                hint: "حدد كمية المخزون",
-                                controller: val.api.amountProdect,
-                                icon: Icon(
-                                  Icons.gamepad,
-                                  color: colorsApp.colorgreyApp,
-                                ),
-                                keyboard: TextInputType.text),
-                            InputApp(
-                                hint: "اوصف المنتج",
-                                controler: val.api.descriptinProdect,
-                                icon: Icon(
-                                  Icons.description,
-                                  color: colorsApp.colorgreyApp,
-                                ),
-                                keyboard: TextInputType.text),
-                          ],
-                        ),
+              title: val.loaddialog == false
+                  ? Container()
+                  : Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "$title",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
                       ),
-                    ],
-                  )),
-              actions: <Widget>[
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(),
-                      flex: 1,
                     ),
-                    Container(
-                      height: 60,
-                      width: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: colorsApp.colorgreyApp.withOpacity(0.1),
-                      ),
+              content: val.loaddialog == false
+                  ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                            height: 50,
+                            width: 50,
+                            child: CircularProgressIndicator()),
+                      ],
+                    )
+                  : Container(
+                      padding: EdgeInsets.only(top: 20),
+                      alignment: Alignment.center,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Expanded(
-                              child: Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              "تحميل صورة",
-                              style: TextStyle(fontWeight: FontWeight.w500),
-                            ),
+                          Container(
+                              child: Column(
+                            children: [
+                              DottedBorder(
+                                borderType: BorderType.RRect,
+                                radius: Radius.circular(10),
+                                dashPattern: [
+                                  6,
+                                  3
+                                ], // طول الخط والمسافة بين الخطوط
+                                color: colorsApp.colorgreyApp,
+                                strokeWidth: 2,
+                                child: Container(
+                                  height: 200,
+                                  width: 300,
+                                  child: Column(
+                                    children: [
+                                      val.imageFileProdect == null
+                                          ? Container(
+                                              margin: EdgeInsets.only(top: 30),
+                                              child: Stack(
+                                                alignment: Alignment.center,
+                                                children: [
+                                                  Image.asset(
+                                                      "assets/images/image1.png"),
+                                                  Container(
+                                                      margin: EdgeInsets.only(
+                                                          bottom: 20),
+                                                      child: Image.asset(
+                                                          "assets/images/image2.png")),
+                                                ],
+                                              ),
+                                            )
+                                          : Container(
+                                              height: 150,
+                                              child: Image.file(
+                                                  val.imageFileProdect!),
+                                            ),
+                                      Expanded(child: Container()),
+                                      Container(
+                                        margin: EdgeInsets.only(bottom: 30),
+                                        child: Text(
+                                          "قم بتحميل صورة المنتج لعرضها في النظام",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
                           )),
                           Container(
-                            margin: EdgeInsets.only(right: 20),
-                            child: CircleAvatar(
-                              backgroundColor: colorsApp.colorgreenApp,
-                              child: IconButton(
-                                  onPressed: () {
-                                    val.uploadImageProdect();
-                                  },
-                                  icon: Icon(Icons.upload_outlined)),
+                            width: 350,
+                            child: Column(
+                              children: [
+                                InputApp(
+                                    hint: "ادخل اسم المنتج",
+                                    controler: val.api.nameProdect,
+                                    icon: Icon(
+                                      Icons.production_quantity_limits,
+                                      color: colorsApp.colorgreyApp,
+                                    ),
+                                    keyboard: TextInputType.text),
+                                InputAppNumber(
+                                    hint: "حدد سعر المنتج",
+                                    controller: val.api.priceProdect,
+                                    icon: Icon(
+                                      Icons.price_change,
+                                      color: colorsApp.colorgreyApp,
+                                    ),
+                                    keyboard: TextInputType.text),
+                                InputAppNumber(
+                                    hint: "حدد كمية المخزون",
+                                    controller: val.api.amountProdect,
+                                    icon: Icon(
+                                      Icons.gamepad,
+                                      color: colorsApp.colorgreyApp,
+                                    ),
+                                    keyboard: TextInputType.text),
+                                InputApp(
+                                    hint: "اوصف المنتج",
+                                    controler: val.api.descriptinProdect,
+                                    icon: Icon(
+                                      Icons.description,
+                                      color: colorsApp.colorgreyApp,
+                                    ),
+                                    keyboard: TextInputType.text),
+                              ],
                             ),
+                          ),
+                        ],
+                      )),
+              actions: <Widget>[
+                val.loaddialog == false
+                    ? Container()
+                    : Row(
+                        children: [
+                          Expanded(
+                            child: Container(),
+                            flex: 1,
+                          ),
+                          Container(
+                            height: 60,
+                            width: 200,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: colorsApp.colorgreyApp.withOpacity(0.1),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Expanded(
+                                    child: Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "تحميل صورة",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w500),
+                                  ),
+                                )),
+                                Container(
+                                  margin: EdgeInsets.only(right: 20),
+                                  child: CircleAvatar(
+                                    backgroundColor: colorsApp.colorgreenApp,
+                                    child: IconButton(
+                                        onPressed: () {
+                                          val.uploadImageProdect();
+                                        },
+                                        icon: Icon(Icons.upload_outlined)),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(),
+                            flex: 3,
+                          ),
+                          ButtonApp2(
+                              title: "الغاء الامر",
+                              color: colorsApp.colorWhaitApp,
+                              fontcolor: colorsApp.colorblackapp,
+                              func: () {
+                                Navigator.of(context).pop();
+                              },
+                              width: 100),
+                          ButtonApp2(
+                              title: "موافق",
+                              color: colorsApp.colorblackapp,
+                              fontcolor: colorsApp.colorWhaitApp,
+                              func: () {
+                                if (formstateAddProdect.currentState!
+                                    .validate()) {
+                                  val.AddProdect(context);
+                                  val.loadDialog();
+                                  print("valied");
+                                } else {
+                                  print("not valied");
+                                }
+                              },
+                              width: 100),
+                          SizedBox(
+                            width: 10,
                           )
                         ],
                       ),
-                    ),
-                    Expanded(
-                      child: Container(),
-                      flex: 3,
-                    ),
-                    ButtonApp2(
-                        title: "الغاء الامر",
-                        color: colorsApp.colorWhaitApp,
-                        fontcolor: colorsApp.colorblackapp,
-                        func: () {
-                          Navigator.of(context).pop();
-                        },
-                        width: 100),
-                    ButtonApp2(
-                        title: "موافق",
-                        color: colorsApp.colorblackapp,
-                        fontcolor: colorsApp.colorWhaitApp,
-                        func: () {
-                          if (formstateAddProdect.currentState!.validate()) {
-                            val.AddProdect(context);
-                            print("valied");
-                          }else{
-                            print("not valied");
-                          }
-                        },
-                        width: 100),
-                    SizedBox(
-                      width: 10,
-                    )
-                  ],
-                ),
               ],
             ),
           );
@@ -348,14 +375,16 @@ class DialogApp {
               shadowColor: Colors.white,
               scrollable: true,
               elevation: 10,
-              title: Container(
+              title:val.loaddialog==false?Container(): Container(
                 alignment: Alignment.center,
                 child: Text(
                   "$title",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ),
-              content: Container(
+              content:val.loaddialog==false?Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [CircularProgressIndicator()],): Container(
                   padding: EdgeInsets.only(top: 20),
                   alignment: Alignment.center,
                   child: Row(
@@ -427,7 +456,7 @@ class DialogApp {
                     ],
                   )),
               actions: <Widget>[
-                Row(
+                 val.loaddialog==false?Container(): Row(
                   children: [
                     Expanded(
                       child: Container(),
@@ -483,7 +512,8 @@ class DialogApp {
                         fontcolor: colorsApp.colorWhaitApp,
                         func: () {
                           if (formstateAddCatogery.currentState!.validate()) {
-                            val.AddCatogery(val.imageFile!,context);
+                            val.AddCatogery(val.imageFile!, context);
+                            val.loadDialog();
                             print("upload file");
                             print("validat");
                           } else {
@@ -503,7 +533,7 @@ class DialogApp {
       },
     );
   }
-  
+
   GlobalKey<FormState> formstateAddDriver = GlobalKey();
   Future<void> addDriver(
       BuildContext context, VoidCallback func, String title) async {
@@ -512,7 +542,7 @@ class DialogApp {
       builder: (BuildContext context) {
         return Consumer<Control>(builder: (context, val, child) {
           return Form(
-            key:formstateAddDriver ,
+            key: formstateAddDriver,
             child: AlertDialog(
               backgroundColor: Colors.white,
               shadowColor: Colors.white,
@@ -553,24 +583,25 @@ class DialogApp {
                                               Image.asset(
                                                   "assets/images/image1.png"),
                                               Container(
-                                                  margin:
-                                                      EdgeInsets.only(bottom: 20),
+                                                  margin: EdgeInsets.only(
+                                                      bottom: 20),
                                                   child: Image.asset(
                                                       "assets/images/image2.png")),
                                             ],
                                           ),
                                         )
                                       : Container(
-                                        height: 150,
-                                          child: Image.file(val.imageFileDriver!),
+                                          height: 150,
+                                          child:
+                                              Image.file(val.imageFileDriver!),
                                         ),
                                   Expanded(child: Container()),
                                   Container(
                                     margin: EdgeInsets.only(bottom: 30),
                                     child: Text(
                                       "قم بتحميل صورة المنتج لعرضها في النظام",
-                                      style:
-                                          TextStyle(fontWeight: FontWeight.w500),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500),
                                     ),
                                   )
                                 ],
@@ -694,7 +725,7 @@ class DialogApp {
                         func: () {
                           if (formstateAddDriver.currentState!.validate()) {
                             val.AddDriver(context);
-                          }else{
+                          } else {
                             print("Not valid");
                           }
                         },
@@ -776,7 +807,7 @@ class DialogApp {
     );
   }
 
-  Future<void> check(BuildContext context ,var data) async {
+  Future<void> check(BuildContext context, var data) async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -786,27 +817,71 @@ class DialogApp {
             shadowColor: Colors.white,
             scrollable: true,
             elevation: 10,
-            content: data==null?Center(child: CircularProgressIndicator(),):Container(//
-                padding: EdgeInsets.only(top: 20),
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    Container(
-                      margin:
-                          EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-                      child:data['message']=='Category Deleted Successfully'||data['message']=='Category Created Successfully'?  Image.asset("assets/images/seccess.png"):Image.asset("assets/images/error.png"),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 30, bottom: 20),
-                      alignment: Alignment.center,
-                      child: Text(
-                        "${data['message']}",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15),
-                      ),
-                    ),
-                  ],
-                )),
+            content: data == null
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Container(
+                    //
+                    padding: EdgeInsets.only(top: 20),
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.symmetric(
+                              vertical: 30, horizontal: 30),
+                          child:
+                              data['message'] ==
+                                          'Category Deleted Successfully' ||
+                                      data['message'] ==
+                                          'Category Created Successfully' ||
+                                      data['message'] ==
+                                          'Product Created Successfully' ||
+                                      data['message'] ==
+                                          'Product Deleted Successfully'
+                                  ? Image.asset("assets/images/seccess.png")
+                                  : Image.asset("assets/images/error.png"),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 30, bottom: 20),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "${data['message']}",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15),
+                          ),
+                        ),
+                      ],
+                    )),
+            actions: <Widget>[
+              ButtonApp2(
+                  title: "موافق",
+                  color: colorsApp.colorblackapp,
+                  fontcolor: colorsApp.colorWhaitApp,
+                  func: () {
+                    Navigator.of(context).pop();
+                  },
+                  width: 100),
+            ],
+          );
+        });
+      },
+    );
+  }
+
+  Future<void> loadeendsx(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Consumer<Control>(builder: (context, val, child) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            shadowColor: Colors.white,
+            scrollable: true,
+            elevation: 10,
+            content: Center(
+              child: CircularProgressIndicator(),
+            ),
             actions: <Widget>[
               ButtonApp2(
                   title: "موافق",

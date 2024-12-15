@@ -74,7 +74,7 @@ class _Drivers extends State<Drivers> {
                                       backgroundColor: colorsApp.colorWhaitApp,
                                       child: IconButton(
                                           onPressed: () {
-                                            dialogApp.deleteProdect(
+                                            dialogApp.delete(
                                                 context,
                                                 () {},
                                                 "هل تريد حذف السائق من النظام");
@@ -167,7 +167,7 @@ class _Drivers extends State<Drivers> {
                                                   colorsApp.colorWhaitApp,
                                               child: IconButton(
                                                   onPressed: () {
-                                                    dialogApp.deleteProdect(
+                                                    dialogApp.delete(
                                                         context,
                                                         () {},
                                                         "هل تريد حذف السائق من النظام");

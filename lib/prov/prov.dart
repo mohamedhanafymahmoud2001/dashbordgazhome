@@ -20,6 +20,11 @@ class Control extends ChangeNotifier {
     screen = value;
     notifyListeners();
   }
+  bool loaddialog=true;
+  loadDialog(){
+    loaddialog=!loaddialog;
+    notifyListeners();
+  }
 
   File? imageFile;
   void uploadImage() async {
@@ -53,6 +58,7 @@ class Control extends ChangeNotifier {
       print(addcatogery);
     }
     Catogery();
+    loadDialog();
     print("end");
     notifyListeners();
   }
@@ -67,7 +73,6 @@ class Control extends ChangeNotifier {
       dialogApp.check(context,deleteCatogery);
     }
     Catogery();
-
     notifyListeners();
   }
 
@@ -83,6 +88,12 @@ class Control extends ChangeNotifier {
   Prodects(int id) async {
     prodects = null;
     prodects = await api.Prodects(id);
+    notifyListeners();
+  }
+  var oneprodect=null;
+  oneProdect(int id){
+    oneprodect=prodects['data'][id];
+    print(oneprodect);
     notifyListeners();
   }
 
@@ -112,15 +123,32 @@ class Control extends ChangeNotifier {
   AddProdect(BuildContext context) async {
     addprodect = null;
     addprodect = await api.AddProdect(imageFileProdect!,idCatogery);
+    loadDialog();
     if (context.mounted) {
       Navigator.of(context).pop();
       dialogApp.check(context,addprodect);
       print(addprodect);
     }
     Prodects(idCatogery);
+    
     print("end");
     notifyListeners();
   } 
+   var deleteProdect;
+  DeleteProdect(int id, BuildContext context) async {
+    deleteProdect = await api.DeleteProdect(id);
+    print("end${deleteProdect}");
+    if (context.mounted) {
+      print("object");
+      Navigator.of(context).pop();
+      dialogApp.check(context,deleteProdect);
+    }
+    Prodects(idCatogery);
+    oneprodect=null;
+
+    notifyListeners();
+  }
+
   File? imageFileDriver;
   void uploadImageDriver() async {
     imageFileDriver=null;

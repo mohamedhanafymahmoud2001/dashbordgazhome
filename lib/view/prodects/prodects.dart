@@ -15,7 +15,7 @@ class Prodects extends StatefulWidget {
 
 class _Prodects extends State<Prodects> {
   ColorsApp colorsApp = new ColorsApp();
-  DialogApp dialogApp=new DialogApp();
+  DialogApp dialogApp = new DialogApp();
   @override
   Widget build(BuildContext context) {
     return Consumer<Control>(builder: (context, val, child) {
@@ -29,107 +29,172 @@ class _Prodects extends State<Prodects> {
               children: [
                 Expanded(
                   flex: 5,
-                  child: Container(
-                    width: double.infinity,
-                    child: GridView.builder(
-                        itemCount: 10,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 4, // عدد الأعمدة في الشبكة
-                          crossAxisSpacing: 20, // المسافة بين الأعمدة
-                          mainAxisSpacing: 20, // المسافة بين الصفوف
-                          childAspectRatio: 0.65, // نسبة العرض إلى الارتفاع
-                        ),
-                        itemBuilder: (context, i) {
-                          return Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                                color: colorsApp.colorWhaitApp.withOpacity(0.6),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  child: CircleAvatar(
-                                    radius: 17,
-                                    backgroundColor: colorsApp.colorWhaitApp,
-                                    child: IconButton(
-                                        onPressed: () {
-                                        dialogApp.deleteProdect(context, (){
-                                          }, "هل ترغب في حذف المنتج من النظام ؟!");
-                                        },
-                                        icon: Icon(
-                                          Icons.delete_outline,
-                                          size: 17,
-                                        )),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 30),
-                                  padding: EdgeInsets.only(
-                                      top: 10, left: 10, right: 10),
+                  child: val.prodects == null
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : Container(
+                          width: double.infinity,
+                          child: GridView.builder(
+                              itemCount: val.prodects['data'].length,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4, // عدد الأعمدة في الشبكة
+                                crossAxisSpacing: 20, // المسافة بين الأعمدة
+                                mainAxisSpacing: 20, // المسافة بين الصفوف
+                                childAspectRatio:
+                                    0.65, // نسبة العرض إلى الارتفاع
+                              ),
+                              itemBuilder: (context, i) {
+                                return Container(
+                                  width: double.infinity,
+                                  padding: EdgeInsets.all(5),
                                   decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: colorsApp.colorgreenApp),
-                                      color: colorsApp.colorWhaitApp,
-                                      borderRadius: BorderRadius.circular(100)),
-                                  child:
-                                      Image.asset("assets/images/prodect1.png"),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 10),
-                                  child: Text(
-                                    textAlign: TextAlign.center,
-                                    "انابيب بي-ال-بي ",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        child: Text(
-                                          textAlign: TextAlign.center,
-                                          "ريال  سعودي",
-                                          style: TextStyle(
-                                            color: colorsApp.colororange,
-                                            fontSize: 13,
+                                      color: colorsApp.colorWhaitApp
+                                          .withOpacity(0.6),
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: MaterialButton(
+                                    padding: EdgeInsets.all(0),
+                                    onPressed: () {
+                                      val.oneProdect(i);
+                                    },
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.topLeft,
+                                          child: CircleAvatar(
+                                            radius: 17,
+                                            backgroundColor:
+                                                colorsApp.colorWhaitApp,
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  dialogApp.delete(
+                                                      context,
+                                                      () {
+                                                        val.DeleteProdect(val.prodects['data'][i]['id'], context);
+                                                      },
+                                                      "هل ترغب في حذف المنتج من النظام ؟!");
+                                                },
+                                                icon: Icon(
+                                                  Icons.delete_outline,
+                                                  size: 17,
+                                                )),
                                           ),
                                         ),
-                                      ),
-                                      Container(
-                                        child: Text(
-                                          textAlign: TextAlign.center,
-                                          "323",
-                                          style: TextStyle(
-                                              color: colorsApp.colorblackapp,
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w400),
+                                        Container(
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 30),
+                                          padding: EdgeInsets.only(
+                                              top: 10, left: 10, right: 10),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color:
+                                                      colorsApp.colorgreenApp),
+                                              color: colorsApp.colorWhaitApp,
+                                              borderRadius:
+                                                  BorderRadius.circular(100)),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                            child: Image.network(
+                                              "${val.prodects['data'][i]['image']}",
+                                              fit: BoxFit.cover,
+                                              errorBuilder:
+                                                  (BuildContext context,
+                                                      Object error,
+                                                      StackTrace? stackTrace) {
+                                                // في حال حدوث خطأ، يمكنك عرض صورة افتراضية
+                                                return Image.asset(
+                                                  "assets/images/logo.png", // المسار إلى الصورة الافتراضية
+                                                  fit: BoxFit.cover,
+                                                );
+                                              },
+                                              loadingBuilder:
+                                                  (BuildContext context,
+                                                      Widget child,
+                                                      ImageChunkEvent?
+                                                          loadingProgress) {
+                                                // عرض مؤشر تحميل أثناء تحميل الصورة
+                                                if (loadingProgress == null)
+                                                  return child;
+                                                return Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    value: loadingProgress
+                                                                .expectedTotalBytes !=
+                                                            null
+                                                        ? loadingProgress
+                                                                .cumulativeBytesLoaded /
+                                                            (loadingProgress
+                                                                    .expectedTotalBytes ??
+                                                                1)
+                                                        : null,
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        Container(
+                                          margin: EdgeInsets.only(top: 10),
+                                          child: Text(
+                                            textAlign: TextAlign.center,
+                                            "${val.prodects['data'][i]['name']}",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(top: 10),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                child: Text(
+                                                  textAlign: TextAlign.center,
+                                                  "ريال  سعودي",
+                                                  style: TextStyle(
+                                                    color:
+                                                        colorsApp.colororange,
+                                                    fontSize: 13,
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Text(
+                                                  textAlign: TextAlign.center,
+                                                  "${val.prodects['data'][i]['price']}",
+                                                  style: TextStyle(
+                                                      color: colorsApp
+                                                          .colorblackapp,
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(top: 10),
+                                          child: Text(
+                                            textAlign: TextAlign.center,
+                                            "${val.prodects['data'][i]['quantity']} remained",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 10),
-                                  child: Text(
-                                    textAlign: TextAlign.center,
-                                    "23 remained",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }),
-                  ),
+                                );
+                              }),
+                        ),
                 ),
                 Expanded(
                     flex: 2,
@@ -145,89 +210,147 @@ class _Prodects extends State<Prodects> {
                                   color:
                                       colorsApp.colorWhaitApp.withOpacity(0.6),
                                   borderRadius: BorderRadius.circular(20)),
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      height: 250,
-                                      width: double.infinity,
-                                      padding: EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                          color: colorsApp.colorWhaitApp,
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      child: Image.asset(
-                                          "assets/images/prodect1.png"),
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.symmetric(vertical: 10),
-                                    child: Text(
-                                      textAlign: TextAlign.center,
-                                      "انابيب بي-ال-بي",
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Container(
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    child: Text(
-                                      textAlign: TextAlign.end,
-                                      "أنبوب SUNPLAST PE-AL-PE متعدد الطبقات عبارة عن أنبوب مركب من خمس طبقات. كلا الطبقتين الداخلية والخارجية عبارة عن مادة HDPE (بولي إيثيلين).",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(top: 10, right: 10),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
+                              child: val.oneprodect == null
+                                  ? Center(
+                                      child: Text(
+                                        "اضغط علي المنتج لعرضه",
+                                        style: TextStyle(
+                                            color: colorsApp.colorgreyApp),
+                                      ),
+                                    )
+                                  : Column(
                                       children: [
-                                        Container(
-                                          child: Text(
-                                            textAlign: TextAlign.center,
-                                            "ريال  سعودي",
-                                            style: TextStyle(
-                                              color: colorsApp.colororange,
-                                              fontSize: 16,
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            height: 250,
+                                            width: double.infinity,
+                                            padding: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                                color: colorsApp.colorWhaitApp,
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            child: Image.network(
+                                              '${val.oneprodect['image']}',
+                                              fit: BoxFit.contain,
+                                              errorBuilder:
+                                                  (BuildContext context,
+                                                      Object error,
+                                                      StackTrace? stackTrace) {
+                                                // في حال حدوث خطأ، يمكنك عرض صورة افتراضية
+                                                return Image.asset(
+                                                  "assets/images/logo.png", // المسار إلى الصورة الافتراضية
+                                                  fit: BoxFit.cover,
+                                                );
+                                              },
+                                              loadingBuilder:
+                                                  (BuildContext context,
+                                                      Widget child,
+                                                      ImageChunkEvent?
+                                                          loadingProgress) {
+                                                // عرض مؤشر تحميل أثناء تحميل الصورة
+                                                if (loadingProgress == null)
+                                                  return child;
+                                                return Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    value: loadingProgress
+                                                                .expectedTotalBytes !=
+                                                            null
+                                                        ? loadingProgress
+                                                                .cumulativeBytesLoaded /
+                                                            (loadingProgress
+                                                                    .expectedTotalBytes ??
+                                                                1)
+                                                        : null,
+                                                  ),
+                                                );
+                                              },
                                             ),
                                           ),
                                         ),
                                         Container(
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 10),
                                           child: Text(
                                             textAlign: TextAlign.center,
-                                            "323",
+                                            "${val.oneprodect['name']}",
                                             style: TextStyle(
-                                                color: colorsApp.colorblackapp,
-                                                fontSize: 16,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          child: Text(
+                                            textAlign: TextAlign.end,
+                                            "${val.oneprodect['description']}",
+                                            style: TextStyle(
+                                                fontSize: 15,
                                                 fontWeight: FontWeight.w400),
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(child: Container()),
-                                  Container(
-                                    child: Row(
-                                      children: [
-                                        CircularProgressWithGradientHomeProdect(),
-                                        Expanded(child: Container()),
-                                        CircleAvatar(
-                                          backgroundColor:
-                                              colorsApp.colorWhaitApp,
-                                          child: IconButton(
-                                              onPressed: () {},
-                                              icon: Icon(Icons.delete_outline)),
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              top: 10, right: 10),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Container(
+                                                child: Text(
+                                                  textAlign: TextAlign.center,
+                                                  "ريال  سعودي",
+                                                  style: TextStyle(
+                                                    color:
+                                                        colorsApp.colororange,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Text(
+                                                  textAlign: TextAlign.center,
+                                                  " ${val.oneprodect['price']}",
+                                                  style: TextStyle(
+                                                      color: colorsApp
+                                                          .colorblackapp,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
+                                        Expanded(child: Container()),
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              CircularProgressWithGradientHomeProdect(),
+                                              Expanded(child: Container()),
+                                              CircleAvatar(
+                                                backgroundColor:
+                                                    colorsApp.colorWhaitApp,
+                                                child: IconButton(
+                                                    onPressed: () {
+                                                      dialogApp.delete(
+                                                      context,
+                                                      () {
+                                                      val.DeleteProdect(val.oneprodect['id'], context);
+                                                      },
+                                                      "هل ترغب في حذف المنتج من النظام ؟!");
+                                                      
+                                                    },
+                                                    icon: Icon(
+                                                        Icons.delete_outline)),
+                                              ),
+                                            ],
+                                          ),
+                                        )
                                       ],
                                     ),
-                                  )
-                                ],
-                              ),
                             ),
                           ),
                           Container(
@@ -244,8 +367,10 @@ class _Prodects extends State<Prodects> {
                                   backgroundColor: colorsApp.colorgreen,
                                   child: IconButton(
                                       onPressed: () {
-                                        dialogApp.addProdect(context, (){}, "اضافة منتج جديد");
-                                      }, icon: Icon(Icons.add)),
+                                        dialogApp.addProdect(
+                                            context, () {}, "اضافة منتج جديد");
+                                      },
+                                      icon: Icon(Icons.add)),
                                 ),
                                 Expanded(
                                     child: Container(
